@@ -1,11 +1,14 @@
 
+import java.util.ArrayList;
+
 public class SpamMain extends javax.swing.JFrame {
 
-    public SpamMain () {
+    public SpamMain() {
         initComponents();
+
     }
 
-    @SuppressWarnings ("unchecked")
+    @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -18,7 +21,7 @@ public class SpamMain extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Spam Check");
 
-        address.setText("fondazionezardigori.com");
+        address.setText("fzmovies.net");
 
         checkSpam.setText("Check Spam");
         checkSpam.addActionListener(new java.awt.event.ActionListener() {
@@ -71,21 +74,20 @@ public class SpamMain extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void checkSpamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkSpamActionPerformed
-        URLMethods spamCheck=new URLMethods();
-        final String link[]={address.getText()};
+        URLMethods spamCheck = new URLMethods();
+        final String link[] = {address.getText()};
         spamCheck.analyseURL(link[0], result);
-        String ipReport=new JSTest().getReport(link);
-        new JSTest().execute(link[0]);
-        result.append(ipReport+"\n");
-        boolean spam=spamCheck.isSpamDns(link[0], result);
+        String ipReport = new JSTest().getReport(link);
+        new JSTest().execute(link[0],result);
+        result.append(ipReport + "\n");
+        boolean spam = spamCheck.isSpamDns(link[0], result);
         if (!spam) {
-            spamCheck.getRedirect(link[0], result);
             result.append(spamCheck.performWhoisQuery(link[0]));
             spamCheck.Extract(link, result);
         }
     }//GEN-LAST:event_checkSpamActionPerformed
 
-    public static void main (String args[]) {
+    public static void main(String args[]) {
 
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -94,13 +96,13 @@ public class SpamMain extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException|InstantiationException|IllegalAccessException|javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(SpamMain.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
 
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
-            public void run () {
+            public void run() {
                 new SpamMain().setVisible(true);
             }
         });

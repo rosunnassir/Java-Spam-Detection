@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.commons.lang3.StringEscapeUtils;
+import javax.swing.JTextArea;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -31,7 +31,7 @@ public class JSTest {
     private static JavascriptExecutor js;
     static String pageLoadStatus = null;
     ArrayList<String> readHostFile = new AdsBlocker().readHostFile();
-    int count = 0;
+    private static int count = 0;
 
     public String getReport(String[] urls) {
         String[] words = {"spam", "malicious", "unrated"};
@@ -62,7 +62,7 @@ public class JSTest {
         return count + " Web Scanner marked this page as spam.";
     }
 
-    public void execute(String args) {
+    public void execute(String args, JTextArea result) {
         if (!args.startsWith("http")) {
             args = "http://" + args;
         }
@@ -76,7 +76,8 @@ public class JSTest {
         driver.get(args);
         waitForPageToLoad();
         waitSeconds(5); //make sure waitForPageToLoad has finished and demonstrated
-        String[] links = getLinks(driver);
+        getLinks(driver);
+        result.append(" No. of ads detected : " + count + "\n");
         driver.quit();
     }
 
@@ -125,12 +126,12 @@ public class JSTest {
             URL u = new URL(url);
             String domain = u.getHost();
             ArrayList< String> list = readHostFile;
-            System.out.println("Size " + list.size());
             for (int i = 0; i < list.size(); i++) {
                 String string = list.get(i);
                 if (string.contains(domain)) {
                     System.out.println("Ads Detected");
                     count++;
+                    System.out.println("Count " + count);
                     break;
                 }
             }

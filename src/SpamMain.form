@@ -59,7 +59,7 @@
   <SubComponents>
     <Component class="javax.swing.JTextField" name="address">
       <Properties>
-        <Property name="text" type="java.lang.String" value="fondazionezardigori.com"/>
+        <Property name="text" type="java.lang.String" value="fzmovies.net"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="checkSpam">

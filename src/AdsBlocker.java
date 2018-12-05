@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -32,7 +33,7 @@ import java.util.logging.Logger;
  * @author Rosun Nassir
  */
 public class AdsBlocker {
-
+    int count = 0;
     private ArrayList<String> places = new ArrayList<>();
 
     public ArrayList<String> readHostFile() {
@@ -70,6 +71,7 @@ public class AdsBlocker {
         if (!reader.isAlive()) {
             System.out.println("Dead");
             list = getList();
+            System.out.println("Size " + list.size());
         }
         return list;
     }

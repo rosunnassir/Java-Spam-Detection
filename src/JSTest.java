@@ -9,10 +9,14 @@ import com.kanishka.virustotalv2.VirusTotalConfig;
 import com.kanishka.virustotalv2.VirustotalPublicV2;
 import com.kanishka.virustotalv2.VirustotalPublicV2Impl;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -26,6 +30,8 @@ public class JSTest {
     private static WebDriver driver = null;
     private static JavascriptExecutor js;
     static String pageLoadStatus = null;
+    ArrayList<String> readHostFile = new AdsBlocker().readHostFile();
+    int count = 0;
 
     public String getReport(String[] urls) {
         String[] words = {"spam", "malicious", "unrated"};
@@ -60,10 +66,8 @@ public class JSTest {
         if (!args.startsWith("http")) {
             args = "http://" + args;
         }
-        String greenBold = "\033[32;1m";
-        String reset = "\033[0m";
-        System.out.println("" + greenBold);
-        System.setProperty("phantomjs.binary.path", "C:\\Users\\Rosun Nassir\\Desktop\\phantomjs-2.1.1-windows\\bin\\as.exe");
+
+        System.setProperty("phantomjs.binary.path", "F:\\Miac\\as.exe");
         DesiredCapabilities dCaps = new DesiredCapabilities();
         dCaps.setJavascriptEnabled(true);
         dCaps.setCapability("takesScreenshot", false);
@@ -72,7 +76,7 @@ public class JSTest {
         driver.get(args);
         waitForPageToLoad();
         waitSeconds(5); //make sure waitForPageToLoad has finished and demonstrated
-        getLinks(driver);
+        String[] links = getLinks(driver);
         driver.quit();
     }
 
@@ -102,14 +106,37 @@ public class JSTest {
         }
     }
 
-    public void getLinks(WebDriver driver) {
+    public String[] getLinks(WebDriver driver) {
         //Getting all the links present in the page by a HTML tag.
         java.util.List<WebElement> links = driver.findElements(By.tagName("a"));
         //Printing the size, will print the no of links present in the page.
         System.out.println("Total Links present is " + links.size());
+        String link[] = new String[links.size()];
         //Printing the links in the page, we get through the href attribute.
         for (int i = 0; i < links.size(); i++) {
-            System.out.println("Links are listed " + links.get(i).getAttribute("href"));
+            link[i] = links.get(i).getAttribute("href");
+            isads(link[i]);
+        }
+        return link;
+    }
+
+    public void isads(String url) {
+        try {
+            URL u = new URL(url);
+            String domain = u.getHost();
+            ArrayList< String> list = readHostFile;
+            System.out.println("Size " + list.size());
+            for (int i = 0; i < list.size(); i++) {
+                String string = list.get(i);
+                if (string.contains(domain)) {
+                    System.out.println("Ads Detected");
+                    count++;
+                    break;
+                }
+            }
+
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(AdsBlocker.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

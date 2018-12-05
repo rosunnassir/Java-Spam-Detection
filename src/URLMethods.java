@@ -141,7 +141,6 @@ public class URLMethods {
                     String date = line.substring(i1, i2);
                     compareDate2 = "Domain Server will expires in " + compareDateUpdate(date, false) + " Months.";
                 }
-//                c.append(line).append("\n");
             }
             c.append(compareDate).append("\n").append(compareDate2).append("\n");
         } catch (IOException ex) {
@@ -193,7 +192,6 @@ public class URLMethods {
             } else {
             }
         }
-
         return dif;
     }
 

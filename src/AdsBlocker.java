@@ -33,7 +33,8 @@ import java.util.logging.Logger;
  * @author Rosun Nassir
  */
 public class AdsBlocker {
-    int count = 0;
+
+    private int count = 0;
     private ArrayList<String> places = new ArrayList<>();
 
     public ArrayList<String> readHostFile() {
@@ -51,7 +52,7 @@ public class AdsBlocker {
                     String thisLine = "";
                     while ((thisLine = bf.readLine()) != null) {
                         String domain = thisLine.substring(thisLine.indexOf("1 ") + 2);
-                        places.add(domain);
+                        getPlaces().add(domain);
                     }
                 } catch (FileNotFoundException ex) {
                     Logger.getLogger(AdsBlocker.class.getName()).log(Level.SEVERE, null, ex);
@@ -77,7 +78,35 @@ public class AdsBlocker {
     }
 
     public ArrayList<String> getList() {
+        return getPlaces();
+    }
+
+    /**
+     * @return the count
+     */
+    public int getCount() {
+        return count;
+    }
+
+    /**
+     * @param count the count to set
+     */
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    /**
+     * @return the places
+     */
+    public ArrayList<String> getPlaces() {
         return places;
+    }
+
+    /**
+     * @param places the places to set
+     */
+    public void setPlaces(ArrayList<String> places) {
+        this.places = places;
     }
 
 }

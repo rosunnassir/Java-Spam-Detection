@@ -134,12 +134,12 @@ public class URLMethods {
                     int i1 = line.indexOf(":") + 2;
                     int i2 = i1 + 11;
                     String date = line.substring(i1, i2);
-                    compareDate = "Domain Server was updated " + compareDateUpdate(date, true) + " Months ago.";
+                    compareDate = "  Domain Server was updated " + compareDateUpdate(date, true) + " Months ago.";
                 } else if (line.contains("Expiry Date:")) {
                     int i1 = line.indexOf(":") + 2;
                     int i2 = i1 + 11;
                     String date = line.substring(i1, i2);
-                    compareDate2 = "Domain Server will expires in " + compareDateUpdate(date, false) + " Months.";
+                    compareDate2 = "  Domain Server will expires in " + compareDateUpdate(date, false) + " Months.";
                 }
             }
             c.append(compareDate).append("\n").append(compareDate2).append("\n");
@@ -219,10 +219,10 @@ public class URLMethods {
                     }
                     Elements media = doc.select("script[src]");
                     result.append("Total Script found : " + media.size());
-                    media.forEach((Element src) -> {
-                        String execute = src.attr("abs:src");
-                        System.out.println("Script " + execute);
-                    });
+//                    media.forEach((Element src) -> {
+//                        String execute = src.attr("abs:src");
+//                        System.out.println("Script " + execute);
+//                    });
                 }
             }
         };
@@ -247,16 +247,16 @@ public class URLMethods {
                 int slashCount = url.length() - url.replaceAll(SLASH, "").length();
                 int dotCount = url.length() - url.replaceAll(DOT, "").length();
                 /////////////////////////////////////////////////////////////////////////////////////
-                if (dotCount > 3) {
-                    System.out.println("URL Contains more than 3 dots.");
+                if (dotCount > 3 && length < 15) {
+                    result.append("  Link contain more than 3 slashes.\n");
                 }
                 if (slashCount > 3 && length < 15) {
-                    System.out.println("URL Contains more than 3 slashes.");
+                    result.append("  Long lcontain more slashes than usually.\n");
                 }
                 if (addCount != 0) {
                     int index = url.indexOf(ADD);
                     String redir = url.substring(index);
-                    System.out.println("URL Contains hidden link.\nDestination is " + redir);
+                    result.append("  Link contain hidden link : " + redir + "\n");
                 }
                 ////////////////////////////////////////////////////////////////////////////////////
                 for (int i = 0; i < length; i++) {
@@ -270,7 +270,7 @@ public class URLMethods {
                 }
                 /////////////////////////////////////////////////////////////////////////////////////
                 if (slashCount < 3 && length >= 15) {
-                    System.out.println("Link is abnormally long with " + countNumeric + " numbers and " + countAlpha + " letters");
+                    result.append("  Link is abnormally long with " + countNumeric + " numbers and " + countAlpha + " letters\n");
                 }
             }
         };

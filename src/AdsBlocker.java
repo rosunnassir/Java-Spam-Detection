@@ -1,3 +1,17 @@
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /*
  * Copyright 2018 Rosun Nassir.
  *
@@ -13,11 +27,55 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  *
  * @author Rosun Nassir
  */
 public class AdsBlocker {
-    
+
+    private ArrayList<String> places = new ArrayList<>();
+
+    public ArrayList<String> readHostFile() {
+        Thread reader;
+        reader = new Thread() {
+            @Override
+            public void run() {
+                BufferedReader bf = null;
+                try {
+                    System.out.println("in thread");
+                    URL resource = getClass().getClassLoader().getResource("resource/ads.txt");
+                    InputStream inputStream = resource.openConnection().getInputStream();
+                    Reader targetReader = new InputStreamReader(inputStream);
+                    bf = new BufferedReader(targetReader);
+                    String thisLine = "";
+                    while ((thisLine = bf.readLine()) != null) {
+                        String domain = thisLine.substring(thisLine.indexOf("1 ") + 2);
+                        places.add(domain);
+                    }
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(AdsBlocker.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(AdsBlocker.class.getName()).log(Level.SEVERE, null, ex);
+                } finally {
+                    try {
+                        bf.close();
+                    } catch (IOException ex) {
+                        Logger.getLogger(AdsBlocker.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        };
+        reader.run();
+        ArrayList<String> list = null;
+        if (!reader.isAlive()) {
+            System.out.println("Dead");
+            list = getList();
+        }
+        return list;
+    }
+
+    public ArrayList<String> getList() {
+        return places;
+    }
+
 }

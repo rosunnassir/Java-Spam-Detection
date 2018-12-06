@@ -47,6 +47,7 @@ public class AdsBlocker {
                     System.out.println("in thread");
                     URL resource = getClass().getClassLoader().getResource("resource/ads.txt");
                     InputStream inputStream = resource.openConnection().getInputStream();
+                    resource.openConnection().getOutputStream();
                     Reader targetReader = new InputStreamReader(inputStream);
                     bf = new BufferedReader(targetReader);
                     String thisLine = "";

@@ -8,7 +8,9 @@ import com.kanishka.virustotal.exception.UnauthorizedAccessException;
 import com.kanishka.virustotalv2.VirusTotalConfig;
 import com.kanishka.virustotalv2.VirustotalPublicV2;
 import com.kanishka.virustotalv2.VirustotalPublicV2Impl;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -21,8 +23,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.phantomjs.PhantomJSDriver;
-import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 
 public class JSTest {
 //key 91f9514c2ec90243f0bb7fcf8401370b86ba7d305a9c63b77a22a3ddcee4a9d1
@@ -35,7 +37,8 @@ public class JSTest {
 
     public String getReport(String[] urls) {
         String[] words = {"spam", "malicious", "unrated"};
-        int counter = 0;
+        int counter;
+        counter = 0;
         final String APIKEY = "91f9514c2ec90243f0bb7fcf8401370b86ba7d305a9c63b77a22a3ddcee4a9d1";
         try {
             VirusTotalConfig.getConfigInstance().setVirusTotalAPIKey(APIKEY);
@@ -67,16 +70,28 @@ public class JSTest {
             args = "http://" + args;
         }
 
-        System.setProperty("phantomjs.binary.path", "F:\\Miac\\as.exe");
-        DesiredCapabilities dCaps = new DesiredCapabilities();
-        dCaps.setJavascriptEnabled(true);
-        dCaps.setCapability("takesScreenshot", false);
-        setDriver(new PhantomJSDriver(dCaps));
+        // Init chromedriver
+        String chromeDriverPath = "C:\\Users\\Rosun Nassir\\Desktop\\as.exe";
+        System.setProperty("webdriver.chrome.driver", chromeDriverPath);
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--headless", "--disable-gpu", "--window-size=1920,1200", "--ignore-certificate-errors");
+        driver = new ChromeDriver(options);
         getDriver().manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
-        getDriver().get(args);
+        System.out.println("Getting page");
+        driver.get(args);
         waitForPageToLoad();
-        waitSeconds(5); //make sure waitForPageToLoad has finished and demonstrated
+        waitSeconds(5);
         getLinks(getDriver());
+        ChromeDriver name = (ChromeDriver) driver;
+        WebElement element = driver.findElement(By.tagName("html"));
+        String contents = (String) ((JavascriptExecutor) driver).executeScript("return arguments[0].outerHTML;", element);
+        try {
+            Writer n = new FileWriter("C:\\Users\\Rosun Nassir\\Desktop\\as.txt");
+            n.write(contents);
+        } catch (IOException ex) {
+            Logger.getLogger(JSTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
         result.append(" No. of ads detected : " + getCount() + "\n");
         getDriver().quit();
     }

@@ -124,7 +124,7 @@ public class URLMethods {
             BufferedReader in = new BufferedReader(isr);
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
             out.println(domainName);
-            String line = "";
+            String line;
             String compareDate = "";
             String compareDate2 = "";
             while ((line = in.readLine()) != null) {

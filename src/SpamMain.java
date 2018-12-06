@@ -119,19 +119,19 @@ public class SpamMain extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void goPanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_goPanelMouseClicked
-        URLMethods spamCheck = new URLMethods();
+//        URLMethods spamCheck = new URLMethods();
         link[0] = address.getText();
-        spamCheck.analyseURL(link[0], result);
+//        spamCheck.analyseURL(link[0], result);
+//
+//        String ipReport = new JSTest().getReport(link);
+//        result.append("  " + ipReport + "\n");
 
-        String ipReport = new JSTest().getReport(link);
-        result.append("  " + ipReport + "\n");
-
-//        new JSTest().execute(link[0], result);
-        boolean spam = spamCheck.isSpamDns(link[0], result);
-        if (!spam) {
-            result.append(spamCheck.performWhoisQuery(link[0]));
-            spamCheck.Extract(link, result);
-        }
+        new JSTest().execute(link[0], result);
+//        boolean spam = spamCheck.isSpamDns(link[0], result);
+//        if (!spam) {
+//            result.append(spamCheck.performWhoisQuery(link[0]));
+//            spamCheck.Extract(link, result);
+//        }
     }//GEN-LAST:event_goPanelMouseClicked
 
     public static void main(String args[]) {
